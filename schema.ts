@@ -5,6 +5,7 @@ import {
   table,
   string,
   relationships,
+  ANYONE_CAN_DO_ANYTHING,
 } from "@rocicorp/zero";
 
 const user = table("user")
@@ -37,7 +38,7 @@ const taskRelationships = relationships(task, ({ one }) => ({
   }),
 }));
 
-export const schema = createSchema(1, {
+export const schema = createSchema({
   tables: [user, task],
   relationships: [taskRelationships],
 });
@@ -46,4 +47,7 @@ export type Schema = typeof schema;
 export type User = Row<typeof schema.tables.user>;
 export type Task = Row<typeof schema.tables.task>;
 
-export const permissions = definePermissions(schema, () => ({}));
+export const permissions = definePermissions(schema, () => ({
+  user: ANYONE_CAN_DO_ANYTHING,
+  task: ANYONE_CAN_DO_ANYTHING,
+}));
