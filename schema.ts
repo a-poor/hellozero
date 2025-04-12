@@ -56,23 +56,33 @@ type EB<T extends keyof Schema['tables']> = ExpressionBuilder<Schema, T>;
 export const permissions = definePermissions<AuthData, Schema>(schema, () => {
   const isAdmin = (authData: AuthData, {cmpLit}: EB<'task'>) => 
     cmpLit(authData.admin, "IS", true);
+  
+  const isAuthenticated = (authData: AuthData, {cmpLit}: EB<'task'>) => 
+    cmpLit(authData.sub, "IS NOT", null);
+  
+  const isCreator = (authData: AuthData, {cmp}: EB<'task'>) => 
+    cmp('createdById', '=', authData.sub)
+  
+  const isAssignee = (authData: AuthData, {cmp}: EB<'task'>) => 
+    cmp('assignedToId', '=', authData.sub);
+
   return {
     user: ANYONE_CAN_DO_ANYTHING,
     task: {
       row: {
         select: [
-          (authData: AuthData, {cmpLit}: EB<'task'>) => cmpLit(authData.sub, "IS NOT", null),
+          isAuthenticated,
         ],
         insert: [
-          (authData: AuthData, {cmp}: EB<'task'>) => cmp('createdById', '=', authData.sub),
+          isCreator,
           isAdmin,
         ],
         update: {
           preMutation: ANYONE_CAN,
           postMutation: [
             isAdmin,
-            (authData: AuthData, {cmp}: EB<'task'>) => cmp('createdById', '=', authData.sub),
-            (authData: AuthData, {cmp}: EB<'task'>) => cmp('assignedToId', '=', authData.sub),
+            isCreator,
+            isAssignee,
           ],
         },
         delete: [
