@@ -25,7 +25,7 @@ export default async function Layout({
           </Link>
         </div>
         <div>
-          Current user: {user?.sub || "(anon)"}
+          User: {user?.name || "(anon)"}{user?.admin ? " (admin)" : ""}
         </div>
       </div>
       <ClientOnly>

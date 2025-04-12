@@ -16,7 +16,7 @@ export type AuthData = {
 const USERS = [
   { id: "u001", name: "Alice", admin: false },
   { id: "u002", name: "Bob", admin: false },
-  { id: "u003", name: "Charlie", admin: false },
+  { id: "u003", name: "Charlie", admin: true },
 ];
 
 export const getUsers = async () => USERS;
