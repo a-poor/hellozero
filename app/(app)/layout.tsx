@@ -1,39 +1,38 @@
-'use client';
-
 import Link from "next/link";
 import { ZeroProvider } from "@/components/zero";
-import { useEffect, useState } from "react";
+import { getUser, getToken } from "@/lib/auth";
+import { ClientOnly } from "@/components/client-only";
 
-export default function Layout({
+export default async function Layout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const [isClient, setIsClient] = useState(false);
-  useEffect(() => {
-    setIsClient(true);
-  }, [setIsClient]);
-
-  if (!isClient) {
-    return (
-      <div>
-        Loading...
-      </div>
-    );
-  }
+  const token = await getToken();
+  const user = await getUser();
   return (
     <>
-      <div className="flex gap-2 mb-4">
-        <Link href="/tasks">
-          Tasks
-        </Link>
-        <Link href="/users">
-          Users
-        </Link>
+      <div className="flex justify-between items-center pb-4">
+        <div className="flex gap-2 mb-4">
+          <Link href="/tasks">
+            Tasks
+          </Link>
+          <Link href="/users">
+            Users
+          </Link>
+          <Link href="/sign-in">
+            Sign-In
+          </Link>
+        </div>
+        <div>
+          Current user: {user?.sub || "(anon)"}
+        </div>
       </div>
-      <ZeroProvider>
-        {children}
-      </ZeroProvider>
+      <ClientOnly>
+        <ZeroProvider userID={user?.sub || "anon"} token={token || ""}>
+          {children}
+        </ZeroProvider>
+      </ClientOnly>
     </>
   );
 }
