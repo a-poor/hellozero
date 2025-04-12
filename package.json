@@ -6,13 +6,15 @@
   "scripts": {
     "dev:ui": "next dev",
     "dev:cache": "zero-cache-dev -p ./schema.ts",
-    "dev:db": "docker-compose up",
+    "dev:db": "docker compose up",
+    "dev:clean": "docker compose down -v; rm -f ./zero-schema.json; rm -f /tmp/zstart_replica.db",
     "build": "next build",
     "start": "next start",
     "lint": "next lint"
   },
   "dependencies": {
     "@rocicorp/zero": "^0.18.2025040300",
+    "jsonwebtoken": "^9.0.2",
     "nanoid": "^5.0.9",
     "next": "15.1.6",
     "react": "^19.0.0",

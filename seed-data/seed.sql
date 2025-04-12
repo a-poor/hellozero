@@ -6,7 +6,8 @@ CREATE DATABASE zstart_cdb;
 
 CREATE TABLE "user" (
   "id" TEXT PRIMARY KEY,
-  "name" TEXT
+  "name" TEXT,
+  "role" TEXT
 );
 
 CREATE TABLE "task" (
@@ -18,14 +19,13 @@ CREATE TABLE "task" (
 );
 
 
-INSERT INTO "user" (id, name) VALUES ('u001', 'Alice');
-INSERT INTO "user" (id, name) VALUES ('u002', 'Bob');
+INSERT INTO "user" ("id", "name", "role") VALUES 
+  ('u001', 'Alice', 'user'),
+  ('u002', 'Bob', 'user'),
+  ('u003', 'Carl', 'admin');
 
 INSERT INTO "task" (id, name, status, "createdById", "assignedToId") VALUES
-  ('t001', 'Get milk', 'done', 'u001', 'u001');
-INSERT INTO "task" (id, name, status, "createdById", "assignedToId") VALUES
-  ('t002', 'Get cookies', 'in-progress', 'u001', 'u001');
-INSERT INTO "task" (id, name, status, "createdById", "assignedToId") VALUES
-  ('t003', 'Walk the dog', 'in-progress', 'u002', 'u002');
-INSERT INTO "task" (id, name, status, "createdById", "assignedToId") VALUES
+  ('t001', 'Get milk', 'done', 'u001', 'u001'),
+  ('t002', 'Get cookies', 'in-progress', 'u001', 'u001'),
+  ('t003', 'Walk the dog', 'in-progress', 'u002', 'u002'),
   ('t004', 'Buy movie tickets', 'not-started', 'u002', 'u001');
